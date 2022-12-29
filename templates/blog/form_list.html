@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} | Home {% endblock %}
+
+{% block content %}
+
+<div class="wraper">  
+
+{% include "partials/_header_top.html" %}
+
+{% include "partials/_header_bottom.html" %}
+
+
+
+<div class="slider display-table center-text"
+style="background-image: url({% static 'img/mortifiedcrew3.jpg'%});
+       background-size: contain;
+    height: 400px; width: 100%;">
+<h1 class="title display-table-cell cell-color"><b>OUR PROGRAMS</b></h1>
+</div><!-- slider -->
+
+
+
+      <h3 class="d-none">form list</h3>
+      
+
+
+
+            
+<!-- ====== Portfolio Start ====== -->
+<section id="portfolio">
+    <div class="container">
+        {% if forms %}
+          <div class="row portfolio-gallary">
+			{% for form in forms %}
+                      <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 port-item design development">
+                          <div class="project portfolio-inner">
+                              <img src="{{ form.image.url }}" alt="project">
+                              <div class="label">
+                                  <div class="label-text"> <a href="{{ form.form_url }}" class="text-title">{{ form.name }}</a> </div>
+                                  <div class="label-bg"></div>
+                              </div>
+                              <div class="zoom"> <a href="{{ form.image.url }}" class="popup-box"  data-lightbox="image" data-title="Project"> <i class="flat flaticon-magnifying-glass"></i> </a> </div>
+                          </div>
+                      </div>
+			{% endfor %}
+                  </div>
+		{% else %}
+               <center><div class="alert alert-info">No forms</div></center>
+                  
+        {% endif %}
+ {# Pagination for article post #}
+            {% if is_paginated %}
+
+                {# Displays previous pages #}
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                    <a class="btn btn-outline-info mb-4"
+                       href="?page={{ page_obj.previous_page_number }}">Previous
+                    </a>
+                {% endif %}
+
+                {# Displays current page #}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                 {% endfor %}
+
+                {# Displays next pages #}
+               {% if page_obj.has_next %}
+                    <a class="btn btn-outline-info mb-4"
+                       href="?page={{ page_obj.next_page_number }}">Next
+                    </a>
+                    <a class="btn btn-outline-info mb-4"
+                       href="?page={{ page_obj.paginator.num_pages }}">Last
+                    </a>
+                {% endif %}
+
+            {% endif %}		
+        </div>
+      
+    </div>
+  </section>
+  <!-- ====== Portfolio End ====== --> 
+  
+              
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% load static %}
+
+    
+    
+    
+    <!-- ====== Footer Start ====== -->
+    <footer>
+        <div class="container">
+          <div class="col-lg-12">
+            <div class="row">
+              
+            
+			  
+              <div class="col-lg-4 col-md-5 col-sm-5 column">
+                <h5>Contact Info</h5>
+                <div class="contact_info">
+                  <ul>
+                    <li> <i class="flat flaticon-facebook-placeholder-for-locate-places-on-maps"></i>123, Street Name, City Name, State Name, Country Name, Pin Code : 123456 </li>
+                    
+                  </ul>
+                  
+                  <div class="follow_us_on"> <a href="javascript:void(0)"><i class="flat flaticon-facebook-logo"></i></a> <a href="javascript:void(0)"><i class="flat flaticon-twitter"></i></a> <a href="javascript:void(0)"><i class="flat flaticon-google-plus-logo"></i></a> <a href="javascript:void(0)"><i class="flat flaticon-linkedin-logo"></i></a> <a href="javascript:void(0)"><i class="flat flaticon-instagram"></i></a> </div>
+                </div>
+              </div>
+			  <div class="col-lg-4 col-md-5 col-sm-5 column">
+			  <br/>
+                <h5></h5>
+                <div class="contact_info">
+                  <ul>
+                    <li> </li>
+                    <li> <i class="flat flaticon-phone-receiver"></i>0123-456-789, 0123-456-789 </li>
+  
+                  </ul>
+                </div>
+              </div>
+			  <div class="col-lg-4 col-md-5 col-sm-5 column">
+			  <br/>
+                <h5></h5>
+                <div class="contact_info">
+                  <ul>
+                    <li> </li>
+                    <li> <i class="flat flaticon-mail-black-envelope-symbol"></i>mortified@gmail.com </li>
+  
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="newsletter">
+              <div class="row">
+                <div class="col-md-3">
+                  <h4>Our Newsletter</h4>
+                </div>
+                <div class="col-md-9">
+                  <form enctype="multipart/form-data" method="POST" action="">
+				  {% csrf_token %}
+                    <div class="row">
+                      <div class="col-md-4">
+                        <input type="text" placeholder="Name" />
+                      </div>
+                      <div class="col-md-4">
+                        <input type="email" placeholder="Email" />
+                      </div>
+                      <div class="col-md-4">
+                        <button type="Submit">Subscribe</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="copyright col-lg-12">
+      <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> Copyright &copy; 2022
+                  <span class="separator-pipesign"></span>
+                  All Rights Reserved
+                  <span class="separator-pipesign"></span>
+                  <a href="/">Mortified</a></div>
+                
+              </div>
+          </div>
+        </div>
+      </footer>
+      <!-- ====== Footer End ====== --> 
+	  
+	  
+	  
+<script>
+const validateEmail = function(email) {
+    var formData = new FormData();
+    formData.append('email', email)
+    $.ajaxSetup({
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+    });
+    $.ajax({
+        url: '/newsletter/validate/',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        error: function (xhr) {
+            console.error(xhr.statusText);
+        },
+        success: function (res) {
+            $('.error').text(res.msg);
+        }
+    });
+};
+
+const subscribeUser = function(email, name) {
+    var formData = new FormData();
+    formData.append('email', email);
+    formData.append('name', name);
+    $.ajaxSetup({
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+    });
+    $.ajax({
+        url: '/newsletter/',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        error: function (xhr) {
+            console.error(xhr.statusText);
+        },
+        success: function (res) {
+            $('.success').text(res.msg);
+            $('#userEmail').val(' ');
+            $('#userName').val(' ');
+        }
+    });
+};
+
+(function ($) {
+    $('#submit').on('click', () => {
+        event.preventDefault();
+        const userEmail = $('#userEmail').val();
+        const userName = $('#userName').val();
+        if (userEmail && userName) {
+            subscribeUser(userEmail, userName);
+        }
+    });
+
+    $('#userEmail').on('change', (event) => {
+        event.preventDefault();
+        const email = event.target.value;
+        validateEmail(email);
+    });
+})(jQuery);
+ </script>

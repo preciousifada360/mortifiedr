@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} | Home {% endblock %}
+
+{% block content %}
+
+<div class="wraper">  
+
+{% include "partials/_header_top.html" %}
+{% include "partials/_header_bottom.html" %}
+
+
+
+
+
+
+
+ 
+
+  <!-- ====== Banner Start ====== -->
+  <section id="mortifiedcrew3">
+    <div class="container">
+      <div class="row">
+        <div class="inner-heading">
+          <h2>{{ article.title }}</h2>
+		  <h5 class="pre-title"><b>{{ article.category }}</b></h5>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Article</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Article Detail</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ====== Banner End ====== --> 
+  
+  <!-- ====== Blog Posts Start ====== -->
+  <section id="single-post-detail">
+    <div class="container">
+      <div class="col-lg-12 col-md-12 col-xs-12">
+        <div class="row">
+          <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 blog-detail">
+            <div class="post-img"> <img src="{{ article.image.url }}" alt="Post" /></div>
+            <div class="post-detail">
+              <div class="about-post">
+                <h4>{{ article.title }}</h4>
+                <div class="post-status">
+                  <ul>
+  					<li><a><i class="flat flaticon-paper"></i>{{ article.count_words }} word{{ article.count_words|pluralize }}</a></li>
+					<li><a><i class="flat flaticon-calendar"></i>{{ article.read_time }} min{{ article.read_time|pluralize }} read</a></li>
+					<li><a><i class="flat flaticon-chat"></i>{{ article.comments.count }} comment{{ article.comments.count|pluralize }}</a></li>
+					<li><a><i class="flat flaticon-eye"></i>{{ article.views }} view{{ article.views|pluralize }}</a></li>
+                  </ul>
+                </div>
+                <div class="description">
+                  <p>{{ article.body | safe }}</p>
+               
+                  
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <div class="tags_share">
+                <div class="tags">
+                  <div class="title">Tags</div>
+                  <ul>
+				  {% for tag in article.tags.all %}
+                    <li><a href="{% url 'blog:tag_articles' tag_name=tag.name %}" title="Bootstrap">{{ tag.name }}</a></li>
+				  {% endfor %}
+                  </ul>
+                </div>
+                <div class="share_on">
+                  <div class="title">Share On :</div>
+                  <div class="icons">
+				  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"><i class="flat flaticon-facebook-logo"></i></a> 
+				  <a href="http://twitter.com/share?text={{ article.title }}. &url={{ request.build_absolute_uri }}"><i class="flat flaticon-twitter"></i></a>
+				  <a href="mailto:?subject={{ article.title }}&amp;body=Check out this article {{ request.build_absolute_uri }}"><i class="flat flaticon-mail-black-envelope-symbol"></i></a>
+				  <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}"><i class="flat flaticon-linkedin-logo"></i></a> 
+				  <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}"><i class="flat flaticon-whatsapp"></i></a> </div>
+                </div>
+              </div>
+            </div>
+            <div class="author_sec">
+              <div class="author-pic"> <img src="{{ article.minister.profile.image.url }}" alt="Author" /> </div>
+              <div class="about-author">
+                <div class="name_designation">
+                  <h6>{{ article.minister.username }}</h6>
+                </div>
+                <div class="social_media">
+                  <ul>
+                    <li><a href="javascript:void(0)" title="Facebook" ><i class="flat flaticon-facebook-logo"></i></a></li>
+                    <li><a href="javascript:void(0)" title="Twitter" ><i class="flat flaticon-twitter"></i></a></li>
+                    <li><a href="javascript:void(0)" title="Google" ><i class="flat flaticon-google-plus-logo"></i></a></li>
+                  </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="description">
+                  <p>{{ article.minister.bio }}</p>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="comments">
+              <h5>There are <span><li><a href="{% url 'blog:article_comments' article.slug %}"><i class="ion-chatbubbles"></i>{{ article.comments.count }} comment{{ article.comments.count|pluralize }}</a></li></span> on this Article</h5>
+              <div class="separator left-align">
+                <ul>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </div>
+              <div class="clearfix"></div>
+              <ol class="comments-list">
+                
+              
+                   
+                </li>
+              </ol>
+            </div>
+            <div class="reply_form">
+            <h5>Leave a Reply</h5>
+            <div class="separator left-align ">
+                <ul>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </div>	
+              <form method="post" action="{% url 'blog:comment_create' article.slug %}">
+			          {% csrf_token %}
+						<div class="row">
+							<div class="col-md-4 col-sm-4 col-sm-4 col-xs-12 form-group">
+							  {{ comment_form.name }}
+							</div>
+							<div class="col-md-4 col-sm-4 col-sm-4 col-xs-12 form-group">
+							  {{ comment_form.email }}
+							</div>
+							
+							<div class="col-md-12 col-sm-12 col-sm-12 col-xs-12 form-group">
+							  {{ comment_form.comment }}
+							</div>
+							<div class="col-md-3 col-sm-3 col-sm-5 col-xs-12 form-group mar-none">
+							  <button type="submit" id="form-submit">Send Message <i class="flat flaticon-plane"></i></button>
+							</div>
+						 </div>
+              </form>
+           </div>
+          </div>
+		  
+		  
+		  
+	
+			
+			
+          <aside class="col-lg-3 col-md-12 col-sm-12 col-xs-12 sidebar right">
+            <div class="widget">
+              <div class="sidebar_heading">
+                <h5>Search</h5>
+                <div class="separator left-align ">
+                  <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="widget-content">
+              <div class="search">
+                <form method="get" action="{% url 'blog:article_search_list_view' %}">
+                  <div class="form-group">
+                    <input type="text" name="q" placeholder="Search for Articles..." />
+                    <button type="submit"> <i class="flat flaticon-search"></i> </button>
+                  </div>
+                </form>
+                </div>
+              </div>
+            </div>
+             <div class="widget">
+              <div class="sidebar_heading">
+                <h5>Recent Posts</h5>
+                <div class="separator left-align ">
+                  <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                  </ul>
+                </div>
+              </div>
+			  {% if related_articles %}
+              <div class="widget-content">
+			  
+			  {% for related_article in related_articles %}
+                <div class="post-item">
+                  <div class="post-img"> <img src="{{ related_article.image.url }}" alt="post" /> </div>
+                  <div class="post-content">
+                    <a href="{{ related_article.get_absolute_url }}">{{ related_article.title }} </a>
+                    <div class="post-status"> <i class="flat flaticon-calendar"></i> <span>{{ related_article.created_on }}</span> </div>
+                  </div>
+                </div>
+				{% endfor %}
+				
+								
+              </div>
+			  {% else %}
+                <div class="alert alert-warning"><b>No Related Articles</b></div>
+            {% endif %}
+            </div>
+            <div class="widget">
+              <div class="sidebar_heading">
+                <h5>Download Teachings</h5>
+               
+              </div>
+			  {% if article.download_url %}
+				<li class="nav-item btn btn-success btn-round"><a class="nav-link" href="{{ article.download_url }}">Download</a></li>
+				{% else %}	
+				<li class="nav-item btn btn-secondary btn-round disabled"><a class="nav-link" href="#">No file to Download</a></li>
+			  {% endif %}
+              <div class="clearfix"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ====== Blog Posts End ====== --> 
+  
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
